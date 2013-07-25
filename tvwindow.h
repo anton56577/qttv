@@ -23,7 +23,6 @@ class TVWindow : public QWidget
     QTimer timerSwitchChan;
 
     int typeClk;
-    bool iFullScreen;
 
     QRect iOldRect;
 
@@ -53,6 +52,9 @@ public:
 
     void RecalcWndWidth(const int wndWidth);
     void RecalcWndHeight(const int wndHeight);
+
+    void SwitchToWindow();
+    void SwitchToFull();
 
     GLWidget *openGL;
 

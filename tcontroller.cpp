@@ -6,19 +6,23 @@
 TController *TController::ct = NULL;
 
 TController::TController()
+    : windowWgt(NULL),
+      sliderVol(NULL),
+      volumeCtrl(NULL),
+      myChanls(NULL),
+      volMuteBtn(NULL),
+      iFullScreen(0)
 {
-    windowWgt = NULL;
-    sliderVol = NULL;
     volumeCtrl = new TAudioControl();
     myChanls = new TChannels();
 }
 
 TController::~TController()
 {
-    delete ct;
-    ct = NULL;
     delete volumeCtrl;
     delete myChanls;
+    windowWgt = NULL;
+    sliderVol = NULL;
 }
 
 TController *TController::get()
@@ -26,6 +30,13 @@ TController *TController::get()
     if (!ct)
         ct = new TController();
     return ct;
+}
+
+void TController::Uninit()
+{
+    if (ct)
+        delete ct;
+    ct = NULL;
 }
 
 void TController::SetWindowsWgt(void *windowWidget)
@@ -153,4 +164,20 @@ void TController::SetVolSlider(void *volSlider, void *muteBtn)
 {
     sliderVol = volSlider;
     volMuteBtn = muteBtn;
+}
+
+void TController::SwitchFullScrean()
+{
+    if (iFullScreen) {
+        iFullScreen = 0;
+        ((TVWindow *)windowWgt)->SwitchToWindow();
+    } else {
+        iFullScreen = 1;
+        ((TVWindow *)windowWgt)->SwitchToFull();
+    }
+}
+
+bool TController::isFullScrean() const
+{
+    return iFullScreen;
 }

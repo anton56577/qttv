@@ -12,8 +12,10 @@ class TController
     void *windowWgt;
     void *sliderVol;
     void *volMuteBtn;
+    bool iFullScreen;
 
     static TController *ct;
+
     TController();
     TController(const TController&);
     const TController &operator=(const TController&) const;
@@ -22,6 +24,7 @@ public:
     ~TController();
 
     static TController *get();
+    static void Uninit();
 
     void SetWindowsWgt(void *windowWidget);
 
@@ -46,6 +49,9 @@ public:
     void ChangeWidthByScale(int &newW, const int wndH) const;
 
     void ShowPropDialog() const;
+
+    void SwitchFullScrean();
+    bool isFullScrean() const;
 
 };
 

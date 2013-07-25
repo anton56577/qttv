@@ -17,7 +17,6 @@ TVWindow::TVWindow() : QWidget()
     wndGeometry.setRect(0,0,320,240);
     this->setGeometry(0,0,320,240);
     iOldRect = this->geometry();
-    iFullScreen = 0;
 
     TController::get()->SetWindowsWgt(this);
 
@@ -50,6 +49,7 @@ TVWindow::~TVWindow()
     openGL->stopShow();
     delete openGL;
     delete cw;
+    TController::Uninit();
     qDebug("delete TVWindow");
 }
 
@@ -63,20 +63,20 @@ void TVWindow::disablescreensaver()
     }
  }
 
-void TVWindow::SwitchToFullScr()
+void TVWindow::SwitchToWindow()
 {
-    //переключение на полный экран и обратно
-    if (!iFullScreen) {
-        iOldRect = geometry();
-        iFullScreen = 1;
-        setWindowState(windowState() | Qt::WindowFullScreen);
-    } else {
-        setWindowState(windowState() ^ Qt::WindowFullScreen);
-        setGeometry(iOldRect);
-        //если меняли соотношение сторон, изменение для окна
-        RecalcWndWidth(iOldRect.width());
-        iFullScreen = 0;
-    }
+    //переключение полный экран - обратно
+    setWindowState(windowState() ^ Qt::WindowFullScreen);
+    setGeometry(iOldRect);
+    //если меняли соотношение сторон, изменение для окна
+    RecalcWndWidth(iOldRect.width());
+}
+
+void TVWindow::SwitchToFull()
+{
+    //переключение на полный экран
+    iOldRect = geometry();
+    setWindowState(windowState() | Qt::WindowFullScreen);
 }
 
 void TVWindow::resizeEvent (QResizeEvent * event)
@@ -104,7 +104,7 @@ void TVWindow::switch_scale_window(QAction *selScl)
 {
     int newheight;
     TController::get()->ChangeScale((TScreenFormat) selScl->data().toInt(), width(), newheight);
-    if (!iFullScreen)
+    if (!TController::get()->isFullScrean())
         resize(width(), newheight);
 }
 
@@ -124,7 +124,7 @@ void TVWindow::mouseDoubleClickEvent (QMouseEvent * event)
     qDebug() << event->button();
     if (event->button() == Qt::LeftButton) {
         openGL->setCursor(Qt::ArrowCursor);
-        SwitchToFullScr();
+        TController::get()->SwitchFullScrean();
         event->accept();
     } else {
         event->ignore();
@@ -135,7 +135,7 @@ void TVWindow::mouseMoveEvent (QMouseEvent * event)
 {
     //разбивка окна по областям наведения мыши, если не на весь экран развернуто
     //qDebug("%d", event->pos().y());
-    if (!iFullScreen) {
+    if (!TController::get()->isFullScrean()) {
         const int minw = 50;
         const int minh = 50;
         if (typeClk > 0 && (event->buttons () & Qt::LeftButton) == 1) {
@@ -381,7 +381,7 @@ void TVWindow::mousePressEvent (QMouseEvent * event)
 
         event->accept();
 
-    } else if (event->button() == Qt::LeftButton && !iFullScreen) {
+    } else if (event->button() == Qt::LeftButton && !TController::get()->isFullScrean()) {
         //запоминаем позицию куда нажали левой кнопкой
         wpos = event->pos();
         wGlobpos = event->globalPos();
@@ -485,7 +485,7 @@ void TVWindow::keyPressEvent(QKeyEvent *event)
         TController::get()->VolimeMute();
     } else if (event->nativeScanCode() == 41 || (event->key() == 16777220 && event->nativeModifiers() == 24)) { //F or alt+enter
         //полный экран
-        SwitchToFullScr();
+        TController::get()->SwitchFullScrean();
     } else if (event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9) {
         //цифра - переключние канала
         if (tmpChan == -1) {
@@ -513,7 +513,7 @@ void TVWindow::resetstateselchan()
 
 void TVWindow::RecalcWndWidth(const int wndWidth)
 {
-    if (!iFullScreen) {
+    if (!TController::get()->isFullScrean()) {
         int newH;
         TController::get()->ChangeHeightByScale(wndWidth, newH);
         resize(wndWidth, newH);
@@ -522,7 +522,7 @@ void TVWindow::RecalcWndWidth(const int wndWidth)
 
 void TVWindow::RecalcWndHeight(const int wndHeight)
 {
-    if (!iFullScreen) {
+    if (!TController::get()->isFullScrean()) {
         int newW;
         TController::get()->ChangeWidthByScale(newW, wndHeight);
         resize(newW, wndHeight);
