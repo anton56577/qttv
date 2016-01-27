@@ -3,7 +3,7 @@
 #include "glwidget.h"
 #include "tvwindow.h"
 #include <stdint.h>
-#define UINT64_C(value)   __CONCAT(value, ULL)
+//#define UINT64_C(value)   __CONCAT(value, ULL)
 #include "libavcodec/avcodec.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent), parentwgt(parent)
@@ -17,7 +17,7 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), p
     setAutoFillBackground(false);
     v4l2.bufTV = NULL;
     v4l2.sizebuf = 0;
-    v4l2.start("/dev/video0", 2);
+    v4l2.start("/dev/video1", 2);
     setFixedSize(320, 240);
 
     //ShowThread = new PicShowThread(this);
@@ -258,7 +258,7 @@ void GLWidget::switchMode(int mode)
     if (mode == 3)
         v4l2.start("/dev/radio0", mode);
     else
-        v4l2.start("/dev/video0", mode);
+        v4l2.start("/dev/video1", mode);
     startShow();
 }
 

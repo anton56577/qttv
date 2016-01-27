@@ -299,8 +299,10 @@ void v4l2capiture::init_device(void)
         fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         fmt.fmt.pix.width = pwidth;//720
         fmt.fmt.pix.height = pheigth;//576;
-        fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_BGR32;//V4L2_PIX_FMT_YUYV;//V4L2_PIX_FMT_BGR32;
+        fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_BGR32;
+        //fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
         fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;
+        //fmt.fmt.pix.field = V4L2_FIELD_NONE;
         fmt.fmt.pix.bytesperline = 0;
 
         if (-1 == xioctl (fd, VIDIOC_S_FMT, &fmt))

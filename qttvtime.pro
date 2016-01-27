@@ -24,6 +24,6 @@ FORMS += \
 INCLUDEPATH += \
     /usr/include \
     /usr/include/i386-linux-gnu \
-    /usr/lib/gcc/i686-linux-gnu/4.8/include
+    /usr/lib/gcc/i686-linux-gnu/4.9/include
 LIBS += /usr/lib/i386-linux-gnu/libasound.so \
         /usr/lib/i386-linux-gnu/libX11.so

@@ -118,6 +118,16 @@ void TVWindow::switchto_fm()
     TController::get()->SwitchTunerMode(FM);
 }
 
+void TVWindow::switchto_av()
+{
+    TController::get()->SwitchTunerMode(S_VIDEO);
+}
+
+void TVWindow::switchto_cs()
+{
+    TController::get()->SwitchTunerMode(COMPOSIT);
+}
+
 void TVWindow::mouseDoubleClickEvent (QMouseEvent * event)
 {
     //двойной клик - на весь экран развернуть
@@ -348,6 +358,8 @@ void TVWindow::mousePressEvent (QMouseEvent * event)
         ParamsMenu->addSeparator();
         ParamsMenu->addAction(trUtf8("FM"), this, SLOT(switchto_fm()));
         ParamsMenu->addAction(trUtf8("TV"), this, SLOT(switchto_tv()));
+        ParamsMenu->addAction(trUtf8("S-VIDEO"), this, SLOT(switchto_av()));
+        ParamsMenu->addAction(trUtf8("COMPOSITE"), this, SLOT(switchto_cs()));
 
         ParamsMenu->addSeparator();
         ParamsMenu->addAction(trUtf8("Настройки"), this, SLOT(show_propdailog()));

@@ -67,6 +67,8 @@ private slots:
      void switch_scale_window(QAction *selScl);
      void switchto_tv();
      void switchto_fm();
+     void switchto_av();
+     void switchto_cs();
      void resetstateselchan();
 };
 
